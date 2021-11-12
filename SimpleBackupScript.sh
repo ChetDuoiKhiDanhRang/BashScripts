@@ -8,9 +8,9 @@ echo "BACKUP FOLDER:"
 tput sgr 0
 while [[ ! -d $sourceFolder ]] &&  [[ ! $sourceFolder = e ]]
 do
-	echo -ne "Input existed folder to backup. Or \"e\" to back to menu: "
-	tput setaf $inputcolor
-	read -e sourceFolder GF_DIR
+	#echo -ne "Input existed folder to backup. Or \"e\" to back to menu: "
+	#tput setaf $inputcolor
+	read -p  "Input existed folder to backup. Or \"e\" to back to menu: $(tput setaf $inputcolor)" -e sourceFolder GF_DIR
 	tput sgr 0
 	echo ""
 done
@@ -21,11 +21,11 @@ then
 	return 0
 fi
 
-echo -ne "Input folder to save zip file. Or \"e\" to back to menu: "
+echo "Input folder to save zip file. Or \"e\" to back to menu: "
 tput setaf $inputcolor
 if [[ -d $destinationFolder ]]
 then
-	echo -ne "\n[$destinationFolder - just Enter to use]"
+	echo -n "[$destinationFolder - just Enter to use] "
 fi
 read -e tmp GF_DIR
 if [[ ${#tmp} -gt 0 ]]
@@ -50,9 +50,9 @@ do
 			echo "Fail when create folder. Error: $?"
 		fi
 	else
-		echo -ne "Input existed folder to save the zip file. Or type \"e\" to menu:"
-		tput setaf $inputcolor
-		read -e destinationFolder GF_DIR
+		#echo -ne "Input existed folder to save the zip file. Or type \"e\" to menu:"
+		#tput setaf $inputcolor
+		read -p  "Input folder to save zip file. Or \"e\" to back to menu: $(tput setaf $inputcolor)" -e destinationFolder GF_DIR
 		tput sgr 0
 	fi
 done
@@ -98,26 +98,22 @@ local user=""
 
 while [[ $databaseName = "" ]]
 do
-	echo -n "Input name of existed database: "
-	tput setaf $inputcolor
-	read -e databaseName GF_DIR
+	read -p  "Input name of existed database:$(tput setaf $inputcolor) " -e databaseName GF_DIR
 	tput sgr 0
 done
 
 
 while [[ $user == "" ]]
 do
-	echo -n "User: "
-	tput setaf $inputcolor
-	read user
+	read -p "User:$(tput setaf $inputcolor) " -e user
 	tput sgr 0
 done
 
-echo -ne "Input folder to save sql file, Or type e to back to menu: "
+echo "Input folder to save sql file, Or type e to back to menu: "
 tput setaf $inputcolor
 if [[ -d $destinationFolder ]]
 then
-	echo -ne "\n[$destinationFolder - just Enter to use]"
+	echo -n "[$destinationFolder - just Enter to use] "
 fi
 read -e tmp GF_DIR
 
@@ -145,9 +141,9 @@ do
 			echo "Fail when create folder. Error: $?"
 		fi
 	else
-		echo -ne "Input existed folder to save sql backup. Or type \"e\" to menu:"
-		tput setaf $inputcolor 
-		read -e destinationFolder GF_DIR
+		#echo -ne "Input existed folder to save sql backup. Or type \"e\" to menu:"
+		#tput setaf $inputcolor 
+		read -p "Input existed folder to save *.sql.zip file. Or type \"e\" to menu: $(tput setaf $inputcolor)" -e destinationFolder GF_DIR
 		tpur sgr 0
 	fi
 done
@@ -161,6 +157,7 @@ sudo chown $USER:$USER $destinationFolder
 tput setaf $runningcolor
 local filename="$(basename $databaseName)_$(date +%Y.%m.%d_%H.%M.%S).sql"
 sudo mysqldump -u "$user" -p "$databaseName" > "$destinationFolder/$filename"
+
 tput sgr 0
 
 if [[ $? -eq 0 ]]
@@ -202,14 +199,12 @@ done
 
 echo "[$(tput setaf $inputcolor)e$(tput sgr 0)] Exit menu"
 echo "[$(tput setaf $inputcolor)f$(tput sgr 0)] Finish this program!!!"
-
-echo "Select: "
+echo ""
 echo "-------------------------------------------------------------------------"
 tput cuu 2 
-tput cuf 8
-tput setaf $inputcolor
-read -n 1 s
-#tput cud 1 
+#tput setaf $inputcolor
+read -p "Select: $(tput setaf $inputcolor)" -n 1 s
+tput sgr 0
 
 if [[ $s =~ $regI ]]
 then
@@ -244,8 +239,9 @@ else
 
 fi
 }
-#Finish functions -> main code ======================================================================
+#Finish functions -> Main code ======================================================================
 #Simple backup tool
+#ver 21.3
 
 inputcolor=2
 runningcolor=3
